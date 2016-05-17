@@ -1,0 +1,14 @@
+{
+  "name": "round-linked-queue",
+  "version": "0.1.0",
+  "description": "Fixed size round linked queue implementation in Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "queue"
+  ],
+  "author": "Henrique Barcelos <rick.hjpbarcelos@gmail.com>",
+  "license": "ISC"
+}
