@@ -2,13 +2,17 @@
   "name": "round-linked-queue",
   "version": "0.1.0",
   "description": "Fixed size round linked queue implementation in Javascript",
-  "main": "index.js",
+  "main": "round-linked-queue.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "$(npm bin)/mocha ./test.js"
   },
   "keywords": [
     "queue"
   ],
   "author": "Henrique Barcelos <rick.hjpbarcelos@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
+  }
 }

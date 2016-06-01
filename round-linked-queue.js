@@ -1,14 +1,15 @@
 'use strict';
 
-
-var RoundLinkedQueue = function RoundLinkedQueue(size) {
-    this.size = size;
-    this.root = null;
-    this.last = null;
-    this._counter = 0;
+var RoundLinkedQueue = function RoundLinkedQueue(maxSize) {
+    this.maxSize = maxSize;
+    this.size = 0;
+    this._root = null;
+    this._last = null;
 }
 
-RoundLinkedQueue.prototype.createNode = function(data, next) {
+module.exports = RoundLinkedQueue;
+
+RoundLinkedQueue.createNode = function(data, next) {
     next = next || null;
     return {
         data: data,
@@ -17,19 +18,24 @@ RoundLinkedQueue.prototype.createNode = function(data, next) {
 };
 
 RoundLinkedQueue.prototype.push = function(data) {
-    var node = this.createNode(data);
-    if (this._counter < this.size) {
-        if (this.root === null) {
-            this.last = this.root = node;
+    var node = RoundLinkedQueue.createNode(data);
+
+    if (this.size < this.maxSize) {
+        if (this._root === null) {
+            this._last = this._root = node;
         } else {
-            this.last.next = node;
-            this.last = node;
+            this._last.next = node;
+            this._last = node;
         }
-        this._counter++;
+        this.size++;
     } else {
-        this.root = this.root.next;
-        this.last.next = node;
-        this.last = node;
+        var data = this._root.data;
+
+        this._root = this._root.next;
+        this._last.next = node;
+        this._last = node;
+
+        return data;
     }
 };
 
@@ -38,13 +44,22 @@ RoundLinkedQueue.prototype.pop = function() {
         throw new Error('Cannot pop from empty queue');
     }
 
-    var data = this.root.data;
+    var data = this._root.data;
     
-    this.root = this.root.next;
-    this._counter--;
+    this._root = this._root.next;
+    this.size--;
 
     return data;
 };
+
+RoundLinkedQueue.prototype.first = function() {
+    return this._root.data;
+};
+
+RoundLinkedQueue.prototype.last = function() {
+    return this._last.data;
+};
+
 
 RoundLinkedQueue.prototype.toString = function() {
     if (this.root === null) {
@@ -71,4 +86,3 @@ RoundLinkedQueue.prototype.toArray = function() {
     return arr;
 }
 
-module.exports = RoundLinkedQueue;
