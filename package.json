@@ -4,15 +4,27 @@
   "description": "Fixed size round linked queue implementation in Javascript",
   "main": "round-linked-queue.js",
   "scripts": {
-    "test": "$(npm bin)/mocha ./test.js"
+    "test": "mocha"
   },
   "keywords": [
-    "queue"
+    "queue",
+    "data structures"
   ],
   "author": "Henrique Barcelos <rick.hjpbarcelos@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^2.5.3"
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-config-prettier-standard": "^3.0.1",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "mocha": "^7.0.1",
+    "prettier": "^1.19.1",
+    "prettier-config-standard": "^1.0.1"
   }
 }
