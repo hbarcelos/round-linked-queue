@@ -31,18 +31,25 @@ class RoundLinkedQueue {
       next: null,
     };
 
-    if (!this._root) {
-      this._root = node;
-      this._first = node;
-      this._last = node;
-    } else {
-      const previousLast = this._last;
-      previousLast.next = node;
+    if (this.length < this.maxLength) {
+      if (!this._root) {
+        this._root = node;
+        this._first = node;
+        this._last = node;
+      } else {
+        const previousLast = this._last;
+        previousLast.next = node;
 
+        this._last = node;
+      }
+
+      this._length += 1;
+    } else {
+      this._root = this._root.next;
+      this._last.next = node;
+      this._first = this._root;
       this._last = node;
     }
-
-    this._length += 1;
   }
 }
 

@@ -54,5 +54,21 @@ describe("Round-Queue", () => {
       // Length should've been increased by 2
       expect(queue.length).to.equal(2, "length not properly set");
     });
+
+    it("Should remove the first element and add the new element to the end of a full queue", () => {
+      const queue = new RoundQueue(3);
+      queue.add(1);
+      queue.add(2);
+      queue.add(3);
+
+      queue.add(4);
+
+      // Element should've been added to the end of the queue
+      expect(queue.last).to.equal(4, "last not properly set");
+      // The second element should've been shifted to the first position
+      expect(queue.first).to.equal(2, "first not properly set");
+      // Length should still be the same
+      expect(queue.length).to.equal(3, "length not properly set");
+    });
   });
 });
