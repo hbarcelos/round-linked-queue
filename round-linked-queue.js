@@ -25,6 +25,10 @@ class RoundLinkedQueue {
   }
 
   get last() {
+    if (!this._last) {
+      throw new Error("Cannot access the last element of an empty queue");
+    }
+
     return this._last.data;
   }
 

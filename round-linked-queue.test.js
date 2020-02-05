@@ -122,5 +122,11 @@ describe("Round-Queue", () => {
 
       expect(() => queue.first).to.throw("Cannot access the first element of an empty queue");
     });
+
+    it("Should throw a proper error when acessing the last element of an empty queue", () => {
+      const queue = new RoundQueue(3);
+
+      expect(() => queue.last).to.throw("Cannot access the last element of an empty queue");
+    });
   });
 });
