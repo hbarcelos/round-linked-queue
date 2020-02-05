@@ -12,5 +12,13 @@ describe("Round-Queue", () => {
 
       expect(queue.maxLength).to.equal(queueLength);
     });
+
+    it("Should initially set the length to zero", () => {
+      const queueLength = 3;
+
+      const queue = new RoundQueue(queueLength);
+
+      expect(queue.length).to.equal(0);
+    });
   });
 });
