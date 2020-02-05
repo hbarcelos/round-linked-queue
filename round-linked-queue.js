@@ -82,6 +82,15 @@ class RoundLinkedQueue {
       return str.slice(0, -2) + " ]";
     }
   }
+
+  *[Symbol.iterator]() {
+    let el = this._root;
+
+    while (el !== null) {
+      yield el.data;
+      el = el.next;
+    }
+  }
 }
 
 module.exports = RoundLinkedQueue;

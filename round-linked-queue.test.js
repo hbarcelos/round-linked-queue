@@ -65,4 +65,18 @@ describe("Round-Queue", () => {
       expect(emptyQueue.remove).to.throw(Error);
     });
   });
+
+  describe("When iterating", () => {
+    it("Should conform to the iterable spec", () => {
+      const queue = new RoundQueue(3);
+      queue.add(1);
+      queue.add(2);
+      queue.add(3);
+
+      const actualValues = [...queue];
+      const expectedValues = [1, 2, 3];
+
+      expect(actualValues).to.deep.equal(expectedValues);
+    });
+  });
 });
