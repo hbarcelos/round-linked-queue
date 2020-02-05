@@ -4,7 +4,6 @@ class RoundLinkedQueue {
   constructor(maxLength) {
     this._maxLength = maxLength;
     this._length = 0;
-    this._root = 0;
     this._first = null;
     this._last = null;
   }
@@ -32,24 +31,18 @@ class RoundLinkedQueue {
     };
 
     if (this.length < this.maxLength) {
-      if (!this._root) {
-        this._root = node;
+      if (!this._first) {
         this._first = node;
-        this._last = node;
-      } else {
-        const previousLast = this._last;
-        previousLast.next = node;
-
         this._last = node;
       }
 
       this._length += 1;
     } else {
-      this._root = this._root.next;
-      this._last.next = node;
-      this._first = this._root;
-      this._last = node;
+      this._first = this._first.next;
     }
+
+    this._last.next = node;
+    this._last = node;
   }
 }
 
