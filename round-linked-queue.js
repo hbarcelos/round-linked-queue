@@ -30,7 +30,7 @@ class RoundLinkedQueue {
       next: null,
     };
 
-    let removedElement;
+    let removedNode = {};
 
     if (this.length < this.maxLength) {
       if (!this._first) {
@@ -40,23 +40,26 @@ class RoundLinkedQueue {
 
       this._length += 1;
     } else {
-      removedElement = this._first.data;
+      removedNode = this._first;
       this._first = this._first.next;
     }
 
     this._last.next = node;
     this._last = node;
 
-    return removedElement;
+    return removedNode.data;
   }
 
   remove() {
-    const removedElement = this.first;
+    const removedNode = this._first;
+    if (!removedNode) {
+      throw new Error("Cannot remove element from an empty queue");
+    }
 
     this._first = this._first.next;
     this._length -= 1;
 
-    return removedElement;
+    return removedNode.data;
   }
 }
 

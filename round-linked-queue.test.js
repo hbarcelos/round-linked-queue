@@ -108,5 +108,11 @@ describe("Round-Queue", () => {
       expect(queue.first).to.equal(2, "should shift the second element to the head of the queue");
       expect(queue.last).to.equal(3, "should not change the last element");
     });
+
+    it("Should throw an error when the queue is empty", () => {
+      const queue = new RoundQueue(3);
+
+      expect(() => queue.remove()).to.throw("Cannot remove element from an empty queue");
+    });
   });
 });
