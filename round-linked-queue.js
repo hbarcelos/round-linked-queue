@@ -49,6 +49,15 @@ class RoundLinkedQueue {
 
     return removedElement;
   }
+
+  remove() {
+    const removedElement = this.first;
+
+    this._first = this._first.next;
+    this._length -= 1;
+
+    return removedElement;
+  }
 }
 
 module.exports = RoundLinkedQueue;

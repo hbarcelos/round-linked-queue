@@ -90,4 +90,23 @@ describe("Round-Queue", () => {
       expect(result).to.equal(undefined, "should not return an element");
     });
   });
+
+  describe("When removing elements", () => {
+    it("Should remove the first element of a non-empty queue", () => {
+      const queue = new RoundQueue(3);
+      queue.add(1);
+      queue.add(2);
+      queue.add(3);
+      const lengthBefore = queue.length;
+
+      const result = queue.remove();
+
+      const lengthAfter = queue.length;
+
+      expect(lengthAfter).to.equal(lengthBefore - 1, "length should decrease by 1");
+      expect(result).to.equal(1, "first element should the one being removed");
+      expect(queue.first).to.equal(2, "should shift the second element to the head of the queue");
+      expect(queue.last).to.equal(3, "should not change the last element");
+    });
+  });
 });
