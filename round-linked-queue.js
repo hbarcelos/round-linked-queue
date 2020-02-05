@@ -17,6 +17,10 @@ class RoundLinkedQueue {
   }
 
   get first() {
+    if (!this._first) {
+      throw new Error("Cannot access the first element of an empty queue");
+    }
+
     return this._first.data;
   }
 

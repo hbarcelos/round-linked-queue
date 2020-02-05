@@ -115,4 +115,12 @@ describe("Round-Queue", () => {
       expect(() => queue.remove()).to.throw("Cannot remove element from an empty queue");
     });
   });
+
+  describe("When accessing elements", () => {
+    it("Should throw a proper error when acessing the first element of an empty queue", () => {
+      const queue = new RoundQueue(3);
+
+      expect(() => queue.first).to.throw("Cannot access the first element of an empty queue");
+    });
+  });
 });
