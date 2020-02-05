@@ -18,17 +18,29 @@ class RoundLinkedQueue {
   }
 
   get first() {
-    return this._first;
+    return this._first.data;
   }
 
   get last() {
-    return this._last;
+    return this._last.data;
   }
 
   add(element) {
-    this._root = element;
-    this._first = element;
-    this._last = element;
+    const node = {
+      data: element,
+      next: null,
+    };
+
+    if (!this._root) {
+      this._root = node;
+      this._first = node;
+      this._last = node;
+    } else {
+      const previousLast = this._last;
+      previousLast.next = node;
+
+      this._last = node;
+    }
 
     this._length += 1;
   }
