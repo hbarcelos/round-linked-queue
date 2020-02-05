@@ -30,6 +30,8 @@ class RoundLinkedQueue {
       next: null,
     };
 
+    let removedElement;
+
     if (this.length < this.maxLength) {
       if (!this._first) {
         this._first = node;
@@ -38,11 +40,14 @@ class RoundLinkedQueue {
 
       this._length += 1;
     } else {
+      removedElement = this._first.data;
       this._first = this._first.next;
     }
 
     this._last.next = node;
     this._last = node;
+
+    return removedElement;
   }
 }
 

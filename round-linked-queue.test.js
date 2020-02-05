@@ -70,5 +70,24 @@ describe("Round-Queue", () => {
       // Length should still be the same
       expect(queue.length).to.equal(3, "length not properly set");
     });
+
+    it("Should return the removed element from a full queue", () => {
+      const queue = new RoundQueue(3);
+      queue.add(1);
+      queue.add(2);
+      queue.add(3);
+
+      const result = queue.add(4);
+
+      expect(result).to.equal(1, "removed wrong element");
+    });
+
+    it("Should return undefined when the queue is not full", () => {
+      const queue = new RoundQueue(3);
+
+      const result = queue.add(1);
+
+      expect(result).to.equal(undefined, "should not return an element");
+    });
   });
 });
