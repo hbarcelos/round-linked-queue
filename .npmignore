@@ -1,0 +1,5 @@
+*.test.js
+.*rc.json
+.*rc
+.nyc_output/
+coverage/
