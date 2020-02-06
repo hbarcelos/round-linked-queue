@@ -1,14 +1,14 @@
 const chai = require("chai");
 const expect = chai.expect;
 
-const RoundQueue = require("./round-linked-queue");
+const RoundLinkedQueue = require("./round-linked-queue");
 
 describe("Round-Queue", () => {
   describe("When creating an instance", () => {
     it("Should properly set the maxLength property", () => {
       const queueLength = 3;
 
-      const queue = new RoundQueue(queueLength);
+      const queue = new RoundLinkedQueue(queueLength);
 
       expect(queue.maxLength).to.equal(queueLength);
     });
@@ -16,7 +16,7 @@ describe("Round-Queue", () => {
     it("Should initially set the length to zero", () => {
       const queueLength = 3;
 
-      const queue = new RoundQueue(queueLength);
+      const queue = new RoundLinkedQueue(queueLength);
 
       expect(queue.length).to.equal(0);
     });
@@ -24,7 +24,7 @@ describe("Round-Queue", () => {
 
   describe("When adding elements", () => {
     it("Should add an element to an empty queue", () => {
-      const queue = new RoundQueue(3);
+      const queue = new RoundLinkedQueue(3);
       const originalLength = queue.length;
       const elementToAdd = 1;
 
@@ -39,7 +39,7 @@ describe("Round-Queue", () => {
     });
 
     it("Should add an element to the end of a non-empty queue", () => {
-      const queue = new RoundQueue(3);
+      const queue = new RoundLinkedQueue(3);
       const previousElement = 1;
       const elementToAdd = 2;
       // Make the queue non-empty
@@ -56,7 +56,7 @@ describe("Round-Queue", () => {
     });
 
     it("Should remove the first element and add the new element to the end of a full queue", () => {
-      const queue = new RoundQueue(3);
+      const queue = new RoundLinkedQueue(3);
       queue.add(1);
       queue.add(2);
       queue.add(3);
@@ -72,7 +72,7 @@ describe("Round-Queue", () => {
     });
 
     it("Should return the removed element from a full queue", () => {
-      const queue = new RoundQueue(3);
+      const queue = new RoundLinkedQueue(3);
       queue.add(1);
       queue.add(2);
       queue.add(3);
@@ -83,7 +83,7 @@ describe("Round-Queue", () => {
     });
 
     it("Should return undefined when the queue is not full", () => {
-      const queue = new RoundQueue(3);
+      const queue = new RoundLinkedQueue(3);
 
       const result = queue.add(1);
 
@@ -93,7 +93,7 @@ describe("Round-Queue", () => {
 
   describe("When removing elements", () => {
     it("Should remove the first element of a non-empty queue", () => {
-      const queue = new RoundQueue(3);
+      const queue = new RoundLinkedQueue(3);
       queue.add(1);
       queue.add(2);
       queue.add(3);
@@ -110,7 +110,7 @@ describe("Round-Queue", () => {
     });
 
     it("Should throw an error when the queue is empty", () => {
-      const queue = new RoundQueue(3);
+      const queue = new RoundLinkedQueue(3);
 
       expect(() => queue.remove()).to.throw("Cannot remove element from an empty queue");
     });
@@ -118,15 +118,64 @@ describe("Round-Queue", () => {
 
   describe("When accessing elements", () => {
     it("Should throw a proper error when acessing the first element of an empty queue", () => {
-      const queue = new RoundQueue(3);
+      const queue = new RoundLinkedQueue(3);
 
       expect(() => queue.first).to.throw("Cannot access the first element of an empty queue");
     });
 
     it("Should throw a proper error when acessing the last element of an empty queue", () => {
-      const queue = new RoundQueue(3);
+      const queue = new RoundLinkedQueue(3);
 
       expect(() => queue.last).to.throw("Cannot access the last element of an empty queue");
+    });
+  });
+
+  describe("When interoperating with native Array", () => {
+    describe("When transforming into an Array", () => {
+      it("Can be converted to an array using the spread operator", () => {
+        const queue = new RoundLinkedQueue(3);
+        queue.add(1);
+        queue.add(2);
+        queue.add(3);
+
+        const result = [...queue];
+
+        expect(result).to.deep.equal([1, 2, 3]);
+      });
+
+      it("Can be converted to an array using the toArray method", () => {
+        const queue = new RoundLinkedQueue(3);
+        queue.add(1);
+        queue.add(2);
+        queue.add(3);
+
+        const result = queue.toArray();
+
+        expect(result).to.deep.equal([1, 2, 3]);
+      });
+    });
+
+    describe("When created from an Array", () => {
+      it("Should create an instance whose maxLength is the same as the length of the input array", () => {
+        const inputArray = [1, 2, 3];
+        const queue = RoundLinkedQueue.fromArray(inputArray);
+
+        expect(queue.maxLength).to.equal(inputArray.length);
+        // inputArray.forEach(el => {
+        //   const removed = queue.remove();
+        //   expect(removed).to.equal(el);
+        // });
+      });
+
+      it("Should preserve the order of the elements in the array when adding them to the queue", () => {
+        const inputArray = [1, 2, 3];
+        const queue = RoundLinkedQueue.fromArray(inputArray);
+
+        inputArray.forEach(el => {
+          const removed = queue.remove();
+          expect(removed).to.equal(el);
+        });
+      });
     });
   });
 });

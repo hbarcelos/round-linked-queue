@@ -1,6 +1,14 @@
 "use strict";
 
 class RoundLinkedQueue {
+  static fromArray(inputArray) {
+    const instance = new RoundLinkedQueue(inputArray.length);
+
+    inputArray.forEach(el => instance.add(el));
+
+    return instance;
+  }
+
   constructor(maxLength) {
     this._maxLength = maxLength;
     this._length = 0;
@@ -68,6 +76,18 @@ class RoundLinkedQueue {
     this._length -= 1;
 
     return removedNode.data;
+  }
+
+  toArray() {
+    return [...this]
+  }
+
+  *[Symbol.iterator]() {
+    let el = this._first;
+    while (el) {
+      yield el.data;
+      el = el.next;
+    }
   }
 }
 
