@@ -1,18 +1,10 @@
 "use strict";
 
 class RoundLinkedQueue {
-  static createNode(data, next) {
-    next = next || null;
-    return {
-      data: data,
-      next: next,
-    };
-  }
-
   constructor(maxLength) {
     this._maxLength = maxLength;
     this._length = 0;
-    this._root = null;
+    this._first = null;
     this._last = null;
   }
 
@@ -24,72 +16,58 @@ class RoundLinkedQueue {
     return this._length;
   }
 
-  add(data) {
-    const node = RoundLinkedQueue.createNode(data);
-
-    if (this.length < this._maxLength) {
-      if (this._root === null) {
-        this._last = this._root = node;
-      } else {
-        this._last.next = node;
-        this._last = node;
-      }
-      this._length++;
-    } else {
-      const popped = this._root.data;
-
-      this._root = this._root.next;
-      this._last.next = node;
-      this._last = node;
-
-      return popped;
-    }
-  }
-
-  remove() {
-    if (this.root === null) {
-      throw new Error("Cannot pop from empty queue");
+  get first() {
+    if (!this._first) {
+      throw new Error("Cannot access the first element of an empty queue");
     }
 
-    const data = this._root.data;
-
-    this._root = this._root.next;
-    this._length--;
-
-    return data;
+    return this._first.data;
   }
 
-  first() {
-    return this._root.data;
-  }
+  get last() {
+    if (!this._last) {
+      throw new Error("Cannot access the last element of an empty queue");
+    }
 
-  last() {
     return this._last.data;
   }
 
-  toString() {
-    if (this.root === null) {
-      return "<empty>";
+  add(element) {
+    const node = {
+      data: element,
+      next: null,
+    };
+
+    let removedNode = {};
+
+    if (this.length < this.maxLength) {
+      if (!this._first) {
+        this._first = node;
+        this._last = node;
+      }
+
+      this._length += 1;
     } else {
-      let next = this.root;
-      let str = "[ ";
-
-      do {
-        str += next.data.toString() + ", ";
-        next = next.next;
-      } while (next !== null);
-
-      return str.slice(0, -2) + " ]";
+      removedNode = this._first;
+      this._first = this._first.next;
     }
+
+    this._last.next = node;
+    this._last = node;
+
+    return removedNode.data;
   }
 
-  *[Symbol.iterator]() {
-    let el = this._root;
-
-    while (el !== null) {
-      yield el.data;
-      el = el.next;
+  remove() {
+    const removedNode = this._first;
+    if (!removedNode) {
+      throw new Error("Cannot remove element from an empty queue");
     }
+
+    this._first = this._first.next;
+    this._length -= 1;
+
+    return removedNode.data;
   }
 }
 

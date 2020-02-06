@@ -4,79 +4,129 @@ const expect = chai.expect;
 const RoundQueue = require("./round-linked-queue");
 
 describe("Round-Queue", () => {
+  describe("When creating an instance", () => {
+    it("Should properly set the maxLength property", () => {
+      const queueLength = 3;
+
+      const queue = new RoundQueue(queueLength);
+
+      expect(queue.maxLength).to.equal(queueLength);
+    });
+
+    it("Should initially set the length to zero", () => {
+      const queueLength = 3;
+
+      const queue = new RoundQueue(queueLength);
+
+      expect(queue.length).to.equal(0);
+    });
+  });
+
   describe("When adding elements", () => {
-    it("Should add an element to the end of a non-full queue", () => {
-      // Queue with max length of 3
-      const nonFullQueue = new RoundQueue(3);
-      const originalLength = nonFullQueue.length;
+    it("Should add an element to an empty queue", () => {
+      const queue = new RoundQueue(3);
+      const originalLength = queue.length;
+      const elementToAdd = 1;
 
-      const poppedElement = nonFullQueue.add(1);
+      queue.add(elementToAdd);
 
-      // When the queue is not full, no popping will be done
-      expect(poppedElement).to.equal(undefined);
       // Element should've been added to the end of the queue
-      expect(nonFullQueue.last()).to.equal(1);
+      expect(queue.last).to.equal(elementToAdd);
+      // But since it is now the only element, it should also be the at beginning as well
+      expect(queue.first).to.equal(elementToAdd);
       // Length should've been increased by 1
-      expect(nonFullQueue.length).to.equal(originalLength + 1);
+      expect(queue.length).to.equal(originalLength + 1);
     });
 
-    it("Should pop the first element and add the new element to the end of a full queue", () => {
-      const fullQueue = new RoundQueue(3);
+    it("Should add an element to the end of a non-empty queue", () => {
+      const queue = new RoundQueue(3);
+      const previousElement = 1;
+      const elementToAdd = 2;
+      // Make the queue non-empty
+      queue.add(previousElement);
 
-      fullQueue.add(1);
-      fullQueue.add(2);
-      fullQueue.add(3); // Queue is now full
+      queue.add(elementToAdd);
 
-      const originalLength = fullQueue.length;
-      const poppedElement = fullQueue.add(4);
-
-      // The first element should've been popped
-      expect(poppedElement).equal(1);
-      // The second element should've been shifted to the first position
-      expect(fullQueue.first()).to.equal(2);
-      // The new element should've been added to the end of the queue
-      expect(fullQueue.last()).to.equal(4);
-      // The length shouldn't have changed
-      expect(fullQueue.length).to.equal(originalLength);
-    });
-  });
-
-  describe("When removing elements", () => {
-    it("Should remove the first element of a non-empty queue", () => {
-      const nonEmptyQueue = new RoundQueue(3);
-
-      nonEmptyQueue.add(1);
-      nonEmptyQueue.add(2);
-
-      const originalLength = nonEmptyQueue.length;
-      const poppedElement = nonEmptyQueue.remove();
-
-      // The first elements should've been popped
-      expect(poppedElement).to.equal(1);
-      // The second element should've been shifted to the first position
-      expect(nonEmptyQueue.first()).to.equal(2);
-      // The length should've been decreased by 1
-      expect(nonEmptyQueue.length).to.equal(originalLength - 1);
+      // Element should've been added to the end of the queue
+      expect(queue.last).to.equal(elementToAdd, "last not properly set");
+      // But the first pointer must remain the first element added
+      expect(queue.first).to.equal(previousElement, "first not properly set");
+      // Length should've been increased by 2
+      expect(queue.length).to.equal(2, "length not properly set");
     });
 
-    it("Should throw an error on an empty queue", function() {
-      const emptyQueue = new RoundQueue(3);
-
-      expect(emptyQueue.remove).to.throw(Error);
-    });
-  });
-
-  describe("When iterating", () => {
-    it("Should conform to the iterable spec", () => {
+    it("Should remove the first element and add the new element to the end of a full queue", () => {
       const queue = new RoundQueue(3);
       queue.add(1);
       queue.add(2);
       queue.add(3);
 
-      const actualValues = [...queue];
-      const expectedValues = [1, 2, 3];
+      queue.add(4);
 
-      expect(actualValues).to.deep.equal(expectedValues);
+      // Element should've been added to the end of the queue
+      expect(queue.last).to.equal(4, "last not properly set");
+      // The second element should've been shifted to the first position
+      expect(queue.first).to.equal(2, "first not properly set");
+      // Length should still be the same
+      expect(queue.length).to.equal(3, "length not properly set");
+    });
+
+    it("Should return the removed element from a full queue", () => {
+      const queue = new RoundQueue(3);
+      queue.add(1);
+      queue.add(2);
+      queue.add(3);
+
+      const result = queue.add(4);
+
+      expect(result).to.equal(1, "removed wrong element");
+    });
+
+    it("Should return undefined when the queue is not full", () => {
+      const queue = new RoundQueue(3);
+
+      const result = queue.add(1);
+
+      expect(result).to.equal(undefined, "should not return an element");
+    });
+  });
+
+  describe("When removing elements", () => {
+    it("Should remove the first element of a non-empty queue", () => {
+      const queue = new RoundQueue(3);
+      queue.add(1);
+      queue.add(2);
+      queue.add(3);
+      const lengthBefore = queue.length;
+
+      const result = queue.remove();
+
+      const lengthAfter = queue.length;
+
+      expect(lengthAfter).to.equal(lengthBefore - 1, "length should decrease by 1");
+      expect(result).to.equal(1, "first element should the one being removed");
+      expect(queue.first).to.equal(2, "should shift the second element to the head of the queue");
+      expect(queue.last).to.equal(3, "should not change the last element");
+    });
+
+    it("Should throw an error when the queue is empty", () => {
+      const queue = new RoundQueue(3);
+
+      expect(() => queue.remove()).to.throw("Cannot remove element from an empty queue");
+    });
+  });
+
+  describe("When accessing elements", () => {
+    it("Should throw a proper error when acessing the first element of an empty queue", () => {
+      const queue = new RoundQueue(3);
+
+      expect(() => queue.first).to.throw("Cannot access the first element of an empty queue");
+    });
+
+    it("Should throw a proper error when acessing the last element of an empty queue", () => {
+      const queue = new RoundQueue(3);
+
+      expect(() => queue.last).to.throw("Cannot access the last element of an empty queue");
     });
   });
 });
