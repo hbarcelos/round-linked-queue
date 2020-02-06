@@ -4,16 +4,18 @@
   "description": "Fixed size round linked queue implementation in Javascript",
   "main": "round-linked-queue.js",
   "scripts": {
-    "test": "mocha"
+    "test": "nyc --reporter=html --reporter=text mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "queue",
     "data structures"
   ],
-  "author": "Henrique Barcelos <rick.hjpbarcelos@gmail.com>",
-  "license": "ISC",
+  "author": "Henrique Barcelos <hbarcelos909@gmail.com>",
+  "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
+    "coveralls": "^3.0.9",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-config-prettier-standard": "^3.0.1",
@@ -24,6 +26,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "mocha": "^7.0.1",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^15.0.0",
     "prettier": "^1.19.1",
     "prettier-config-standard": "^1.0.1"
   }
